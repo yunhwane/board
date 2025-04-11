@@ -16,7 +16,7 @@ class ArticlePersistentAdapter(
 
     private val snowflake = Snowflake();
 
-    override fun save(command: ArticleCreateCommand): Article {
+    override fun save(command: Article): Article {
         val articleEntity = ArticleEntity(
             id = snowflake.nextId(),
             title = command.title,
@@ -38,7 +38,7 @@ class ArticlePersistentAdapter(
     }
 
     override fun update(article: Article): Article {
-        val article = getArticle(articleId = article.articleId)
+        val article = getArticle(articleId = article.articleId!!)
 
         val articleEntity = ArticleEntity(
             id = article.articleId,
@@ -64,7 +64,7 @@ class ArticlePersistentAdapter(
 
     override fun delete(articleId: Long) {
         val article = getArticle(articleId = articleId)
-        jpaArticleRepository.deleteById(article.articleId)
+        jpaArticleRepository.deleteById(article.articleId!!)
     }
 
     override fun getArticle(articleId: Long): Article {

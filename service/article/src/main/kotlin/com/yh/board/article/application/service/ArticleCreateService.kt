@@ -12,6 +12,12 @@ class ArticleCreateService(
     private val saveArticlePort: SaveArticlePort,
 ) : ArticleCreateUseCase {
     override fun execute(command: ArticleCreateCommand): Article {
-        return saveArticlePort.save(command)
+        val article = Article(
+            title = command.title,
+            content = command.content,
+            writerId = command.writerId,
+            boardId =  command.boardId,
+        )
+        return saveArticlePort.save(article)
     }
 }
