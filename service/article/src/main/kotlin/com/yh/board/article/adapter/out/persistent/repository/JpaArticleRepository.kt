@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface JpaArticleRepository : JpaRepository<ArticleEntity, Long> {
-
 }
