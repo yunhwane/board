@@ -62,6 +62,11 @@ class ArticlePersistentAdapter(
         )
     }
 
+    override fun delete(articleId: Long) {
+        val article = getArticle(articleId = articleId)
+        jpaArticleRepository.deleteById(article.articleId)
+    }
+
     override fun getArticle(articleId: Long): Article {
         val articleEntity = jpaArticleRepository.findById(articleId).orElseThrow {
             IllegalArgumentException("Article not found with id: $articleId")

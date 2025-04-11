@@ -5,16 +5,14 @@ import com.yh.board.article.adapter.`in`.web.request.ArticleUpdateRequest
 import com.yh.board.article.adapter.`in`.web.response.ArticleCreateResponse
 import com.yh.board.article.adapter.`in`.web.response.ArticleUpdateResponse
 import com.yh.board.article.adapter.`in`.web.support.ApiResponse
-import com.yh.board.article.application.port.`in`.ArticleCreateCommand
-import com.yh.board.article.application.port.`in`.ArticleCreateUseCase
-import com.yh.board.article.application.port.`in`.ArticleUpdateCommand
-import com.yh.board.article.application.port.`in`.ArticleUpdateUseCase
+import com.yh.board.article.application.port.`in`.*
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import java.net.URI
@@ -23,7 +21,8 @@ import java.net.URI
 @RequestMapping("/v1/articles")
 class ArticleController(
     private val articleCreateUseCase: ArticleCreateUseCase,
-    private val articleUpdateUseCase: ArticleUpdateUseCase
+    private val articleUpdateUseCase: ArticleUpdateUseCase,
+    private val articleDeleteUseCase: ArticleDeleteUseCase,
 ) {
 
     @PostMapping
@@ -79,6 +78,18 @@ class ArticleController(
                     createdAt = article.createdAt,
                     updatedAt = article.updatedAt,
                 )
+            )
+        )
+    }
+
+    @DeleteMapping("/{articleId}")
+    fun delete(@PathVariable articleId: Long): ResponseEntity<ApiResponse<Void?>> {
+        articleDeleteUseCase.execute(articleId = articleId)
+        return ResponseEntity.ok().body(
+            ApiResponse.with(
+                httpStatus = HttpStatus.OK,
+                message = "게시글이 삭제되었습니다.",
+                data = null
             )
         )
     }
